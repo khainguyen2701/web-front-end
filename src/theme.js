@@ -7,23 +7,23 @@ const theme = extendTheme({
     light: {
       palette: {
         primary: {
-          main: teal[200],
-          secondary: deepOrange[200]
+          main: teal[500],
+          secondary: deepOrange[500]
         }
       }
     },
     dark: {
       palette: {
         primary: {
-          main: cyan[200],
-          secondary: orange[200]
+          main: cyan[500],
+          secondary: orange[500]
         }
       }
     }
   },
   trello: {
-    appBarHeight: "48px",
-    boardBarHeight: "58px"
+    appBarHeight: "58px",
+    boardBarHeight: "68px"
   }
 });
 
