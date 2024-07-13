@@ -3,7 +3,7 @@ import { Badge, Tooltip } from "@mui/material";
 
 const Notification = () => {
   return (
-    <Tooltip title="Notification">
+    <Tooltip title="Notification" sx={{ cursor: "pointer" }}>
       <Badge badgeContent={4} color="primary">
         <NotificationsActiveIcon />
       </Badge>

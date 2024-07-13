@@ -1,16 +1,17 @@
-import { Box, SvgIcon, TextField, Typography } from "@mui/material";
-import React from "react";
-import ModeSelect from "../ModeSelect";
 import AppsIcon from "@mui/icons-material/Apps";
+import { Box, SvgIcon, TextField, Typography } from "@mui/material";
+import ModeSelect from "../ModeSelect";
 
 import { ReactComponent as TrelloIcon } from "~/assets/trello.svg";
-import WorkSpaces from "./Menus/WorkSpaces";
+import Account from "./Account";
+import CustomButton from "../CustomButton";
+import Help from "./Help";
 import Recent from "./Menus/Recent";
 import Stared from "./Menus/Stared";
 import Templates from "./Menus/Templates";
+import WorkSpaces from "./Menus/WorkSpaces";
 import Notification from "./Notification";
-import Help from "./Help";
-import Account from "./Account";
+import LibraryAddIcon from "@mui/icons-material/LibraryAdd";
 
 const AppBar = () => {
   return (
@@ -22,12 +23,21 @@ const AppBar = () => {
         display: "flex",
         alignItems: "center",
         px: 2,
-        justifyContent: "space-between"
+        justifyContent: "space-between",
+        gap: 2,
+        overflow: "auto"
       }}
     >
       <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-        <AppsIcon sx={{ color: "primary.main" }} />
-        <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+        <AppsIcon sx={{ color: "primary.main", cursor: "pointer" }} />
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 0.5,
+            cursor: "pointer"
+          }}
+        >
           <SvgIcon
             component={TrelloIcon}
             inheritViewBox
@@ -44,10 +54,13 @@ const AppBar = () => {
             Trello
           </Typography>
         </Box>
-        <WorkSpaces />
-        <Recent />
-        <Stared />
-        <Templates />
+        <Box sx={{ display: { xs: "none", md: "flex" }, gap: 1 }}>
+          <WorkSpaces />
+          <Recent />
+          <Stared />
+          <Templates />
+          <CustomButton title="Create" startIcon={<LibraryAddIcon />} />
+        </Box>
       </Box>
       <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
         <TextField
@@ -55,6 +68,7 @@ const AppBar = () => {
           label="Search"
           variant="outlined"
           size="small"
+          sx={{ minWidth: 120 }}
         />
         <ModeSelect />
         <Notification />

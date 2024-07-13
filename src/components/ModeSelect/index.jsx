@@ -3,12 +3,11 @@ import LightModeIcon from "@mui/icons-material/LightMode";
 import SettingsApplicationsIcon from "@mui/icons-material/SettingsApplications";
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { useColorScheme } from "@mui/material/styles";
-import React from "react";
 
 const ModeSelect = () => {
   const { mode, setMode } = useColorScheme();
   return (
-    <FormControl>
+    <FormControl sx={{ minWidth: 120 }}>
       <InputLabel id="demo-simple-select-label">Mode</InputLabel>
       <Select
         labelId="demo-simple-select-label"
