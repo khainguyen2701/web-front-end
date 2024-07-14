@@ -1,4 +1,4 @@
-import { Button, Menu, MenuItem } from "@mui/material";
+import { Box, Button, Menu, MenuItem } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import React from "react";
 
@@ -13,8 +13,9 @@ const WorkSpaces = () => {
   };
 
   return (
-    <div>
+    <Box>
       <Button
+        sx={{ color: "white" }}
         id="basic-button"
         aria-controls={open ? "basic-menu" : undefined}
         aria-haspopup="true"
@@ -22,7 +23,6 @@ const WorkSpaces = () => {
         onClick={handleClick}
         variant="text"
         endIcon={<ExpandMoreIcon />}
-        sx={{ textTransform: "uppercase" }}
       >
         Workspaces
       </Button>
@@ -39,7 +39,7 @@ const WorkSpaces = () => {
         <MenuItem onClick={handleClose}>My account</MenuItem>
         <MenuItem onClick={handleClose}>Logout</MenuItem>
       </Menu>
-    </div>
+    </Box>
   );
 };
 

@@ -8,7 +8,17 @@ const ModeSelect = () => {
   const { mode, setMode } = useColorScheme();
   return (
     <FormControl sx={{ minWidth: 120 }}>
-      <InputLabel id="demo-simple-select-label">Mode</InputLabel>
+      <InputLabel
+        id="demo-simple-select-label"
+        sx={{
+          color: "white",
+          "&.Mui-focused": {
+            color: "white"
+          }
+        }}
+      >
+        Mode
+      </InputLabel>
       <Select
         labelId="demo-simple-select-label"
         id="demo-simple-select"
@@ -16,6 +26,21 @@ const ModeSelect = () => {
         size={"small"}
         label="Mode"
         onChange={(e) => setMode(e.target.value)}
+        sx={{
+          color: "white",
+          ".MuiOutlinedInput-notchedOutline": {
+            borderColor: "white"
+          },
+          "&:hover .MuiOutlinedInput-notchedOutline": {
+            borderColor: "white"
+          },
+          "&:Mui-focused .MuiOutlinedInput-notchedOutline": {
+            borderColor: "white"
+          },
+          ".MuiSvgIcon-root": {
+            color: "white"
+          }
+        }}
       >
         <MenuItem value={"light"}>
           <Box sx={{ alignItems: "center", gap: 2, display: "flex" }}>

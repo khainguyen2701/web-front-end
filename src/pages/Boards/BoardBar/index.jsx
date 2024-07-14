@@ -20,8 +20,10 @@ const BoardBar = () => {
         justifyContent: "space-between",
         gap: 2,
         overflow: "auto",
-        borderTop: "1px solid #00bfa5",
-        px: 2
+        borderBottom: "1px solid white",
+        px: 2,
+        backgroundColor: (theme) =>
+          theme.palette.mode === "dark" ? "#34495e" : "#1976d2"
       }}
     >
       <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
@@ -52,14 +54,26 @@ const BoardBar = () => {
         />
       </Box>
       <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-        <CustomButton title="Invite" startIcon={<PersonAddAlt1Icon />} />
+        <CustomButton
+          title="Invite"
+          startIcon={<PersonAddAlt1Icon />}
+          sx={{
+            color: "white",
+            borderColor: "white",
+            "&:hover": {
+              borderColor: "white"
+            }
+          }}
+        />
         <AvatarGroup
           max={3}
           sx={{
+            gap: "10px",
             "& .MuiAvatar-root": {
               width: 34,
               height: 34,
-              fontSize: 16
+              fontSize: 16,
+              border: "none"
             }
           }}
         >

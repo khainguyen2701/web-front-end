@@ -1,24 +1,26 @@
 import AppsIcon from "@mui/icons-material/Apps";
-import { Box, SvgIcon, TextField, Typography } from "@mui/material";
+import { Box, SvgIcon, Typography } from "@mui/material";
 import ModeSelect from "../ModeSelect";
 
+import LibraryAddIcon from "@mui/icons-material/LibraryAdd";
 import { ReactComponent as TrelloIcon } from "~/assets/trello.svg";
-import Account from "./Account";
 import CustomButton from "../CustomButton";
+import Account from "./Account";
 import Help from "./Help";
 import Recent from "./Menus/Recent";
 import Stared from "./Menus/Stared";
 import Templates from "./Menus/Templates";
 import WorkSpaces from "./Menus/WorkSpaces";
 import Notification from "./Notification";
-import LibraryAddIcon from "@mui/icons-material/LibraryAdd";
+import SearchTextField from "./SearchTextField";
 
 const AppBar = () => {
   return (
     <Box
       sx={{
         width: "100%",
-        backgroundColor: "white",
+        backgroundColor: (theme) =>
+          theme.palette.mode === "dark" ? "#2c3e50" : "#1565c0",
         height: (theme) => theme.trello.appBarHeight,
         display: "flex",
         alignItems: "center",
@@ -29,7 +31,7 @@ const AppBar = () => {
       }}
     >
       <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-        <AppsIcon sx={{ color: "primary.main", cursor: "pointer" }} />
+        <AppsIcon sx={{ color: "white", cursor: "pointer" }} />
         <Box
           sx={{
             display: "flex",
@@ -41,14 +43,14 @@ const AppBar = () => {
           <SvgIcon
             component={TrelloIcon}
             inheritViewBox
-            sx={{ color: "primary.main" }}
+            sx={{ color: "white" }}
           />
           <Typography
             variant="span"
             sx={{
               fontSize: "1.2rem",
               fontWeight: "bold",
-              color: "primary.main"
+              color: "white"
             }}
           >
             Trello
@@ -59,17 +61,21 @@ const AppBar = () => {
           <Recent />
           <Stared />
           <Templates />
-          <CustomButton title="Create" startIcon={<LibraryAddIcon />} />
+          <CustomButton
+            title="Create"
+            startIcon={<LibraryAddIcon />}
+            sx={{
+              color: "white",
+              border: "none",
+              "&:hover": {
+                border: "none"
+              }
+            }}
+          />
         </Box>
       </Box>
       <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-        <TextField
-          id="outlined-basic"
-          label="Search"
-          variant="outlined"
-          size="small"
-          sx={{ minWidth: 120 }}
-        />
+        <SearchTextField />
         <ModeSelect />
         <Notification />
         <Help />

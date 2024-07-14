@@ -15,6 +15,7 @@ const Recent = () => {
   return (
     <div>
       <Button
+        sx={{ color: "white" }}
         id="basic-button"
         aria-controls={open ? "basic-menu" : undefined}
         aria-haspopup="true"
@@ -22,7 +23,6 @@ const Recent = () => {
         onClick={handleClick}
         variant="text"
         endIcon={<ExpandMoreIcon />}
-        sx={{ textTransform: "uppercase" }}
       >
         Recent
       </Button>

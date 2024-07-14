@@ -1,61 +1,41 @@
-import { backdropClasses } from "@mui/material";
-import { cyan, deepOrange, orange, teal } from "@mui/material/colors";
 import { experimental_extendTheme as extendTheme } from "@mui/material/styles";
 
-// Create a theme instance.
+const APP_BAR_HEIGHT = "58px";
+const BOARD_BAR_HEIGHT = "68px";
+const BOARD_BAR_CONTENT = `calc(100vh - ${BOARD_BAR_HEIGHT} - ${APP_BAR_HEIGHT})`;
 const theme = extendTheme({
   colorSchemes: {
-    light: {
-      palette: {
-        primary: {
-          main: teal[500],
-          secondary: deepOrange[500]
-        }
-      }
-    },
-    dark: {
-      palette: {
-        primary: {
-          main: cyan[500],
-          secondary: orange[500]
-        }
-      }
-    }
+    light: {},
+    dark: {}
   },
   trello: {
-    appBarHeight: "58px",
-    boardBarHeight: "68px"
+    appBarHeight: APP_BAR_HEIGHT,
+    boardBarHeight: BOARD_BAR_HEIGHT,
+    boardBarContentHeight: BOARD_BAR_CONTENT
   },
   components: {
     MuiButton: {
       styleOverrides: {
-        root: ({ theme }) => {
-          return {
-            textTransform: "none",
-            color: theme.palette.primary.main,
-            fontSize: "0.875rem"
-          };
+        root: {
+          textTransform: "none",
+          fontSize: "0.875rem",
+          borderWidth: "0.5px"
         }
       }
     },
     MuiOutlinedInput: {
       styleOverrides: {
-        root: ({ theme }) => {
-          return {
-            color: theme.palette.primary.main,
-            fontSize: "0.875rem",
-            ".MuiOutlinedInput-notchedOutline": {
-              borderColor: theme.palette.primary.light
-            },
-            "&:hover": {
-              ".MuiOutlinedInput-notchedOutline": {
-                borderColor: theme.palette.primary.main
-              }
-            },
-            "& fieldset": {
-              borderWidth: "1px !important"
-            }
-          };
+        root: {
+          fontSize: "0.875rem",
+          "& fieldset": {
+            borderWidth: "0.5px !important"
+          },
+          "&:hover fieldset": {
+            borderWidth: "1px !important"
+          },
+          "&.Mui-focused fieldset": {
+            borderWidth: "1px !important"
+          }
         }
       }
     },
@@ -63,15 +43,31 @@ const theme = extendTheme({
       styleOverrides: {
         body: {
           "*::-webkit-scrollbar": {
-            width: "10px",
-            height: "10px"
+            width: "8px",
+            height: "8px"
           },
           "*::-webkit-scrollbar-thumb": {
-            backgroundColor: "#bdc3c7",
+            backgroundColor: "#dcdde1",
             borderRadius: "10px"
           },
           "*::-webkit-scrollbar-thumb:hover": {
-            backgroundColor: "#00b894"
+            backgroundColor: "white"
+          }
+        }
+      }
+    },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: {
+          fontSize: "0.875rem"
+        }
+      }
+    },
+    MuiTypography: {
+      styleOverrides: {
+        root: {
+          "&.MuiTypography-body1": {
+            fontSize: "0.875rem"
           }
         }
       }

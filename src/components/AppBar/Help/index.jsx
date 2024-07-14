@@ -3,8 +3,8 @@ import { Tooltip } from "@mui/material";
 
 const Help = () => {
   return (
-    <Tooltip title="Help" sx={{ cursor: "pointer" }}>
-      <HelpOutlineOutlinedIcon />
+    <Tooltip title="Help">
+      <HelpOutlineOutlinedIcon sx={{ color: "white", cursor: "pointer" }} />
     </Tooltip>
   );
 };

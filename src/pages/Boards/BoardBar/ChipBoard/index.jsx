@@ -6,13 +6,13 @@ const ChipBoard = (props) => {
   return (
     <Chip
       sx={{
-        color: "primary.main",
+        color: "white",
         border: "none",
         px: 2,
         borderRadius: "4px",
         backgroundColor: "transparent",
-        "& .MuiSvgIcon-root": {
-          color: "primary.main"
+        ".MuiSvgIcon-root": {
+          color: "white"
         },
         "&:hover": {
           bgColor: "primary.50"

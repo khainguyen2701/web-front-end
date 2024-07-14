@@ -3,9 +3,9 @@ import { Badge, Tooltip } from "@mui/material";
 
 const Notification = () => {
   return (
-    <Tooltip title="Notification" sx={{ cursor: "pointer" }}>
-      <Badge badgeContent={4} color="primary">
-        <NotificationsActiveIcon />
+    <Tooltip title="Notification">
+      <Badge color="warning" variant="dot">
+        <NotificationsActiveIcon sx={{ color: "white", cursor: "pointer" }} />
       </Badge>
     </Tooltip>
   );
