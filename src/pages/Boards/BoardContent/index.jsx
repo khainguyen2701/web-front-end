@@ -1,7 +1,6 @@
-import { Box } from "@mui/material";
-import { Fragment } from "react";
-import BoardColumn from "./BoardColumn";
-
+import { Box, Button } from "@mui/material";
+import ListColumn from "./ListColumn";
+import NoteAddIcon from "@mui/icons-material/NoteAdd";
 const BoardContent = () => {
   return (
     <Box
@@ -26,14 +25,35 @@ const BoardContent = () => {
           }
         }}
       >
-        {[1, 2, 3, 4].map((item) => (
-          <Fragment key={item}>
-            <BoardColumn />
-          </Fragment>
-        ))}
+        <ListColumn />
+        <Box
+          sx={{
+            minWidth: "200px",
+            maxWidth: "200px",
+            mx: 2,
+            borderRadius: "6px",
+            height: "fit-content",
+            background: "#ffffff3d"
+          }}
+        >
+          <Button
+            sx={{
+              color: "white",
+              display: "flex",
+              justifyContent: "flex-start",
+              pl: 2.5,
+              py: 1
+            }}
+            startIcon={<NoteAddIcon sx={{ color: "white" }} />}
+          >
+            Add new column
+          </Button>
+        </Box>
       </Box>
     </Box>
   );
 };
+
+BoardContent.PropTypes = {};
 
 export default BoardContent;

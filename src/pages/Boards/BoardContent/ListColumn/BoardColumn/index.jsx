@@ -5,19 +5,12 @@ import {
   ContentPaste
 } from "@mui/icons-material";
 import AddCardIcon from "@mui/icons-material/AddCard";
-import AttachmentIcon from "@mui/icons-material/Attachment";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import GroupIcon from "@mui/icons-material/Group";
-import MarkUnreadChatAltIcon from "@mui/icons-material/MarkUnreadChatAlt";
 import {
   Box,
   Button,
-  Card,
-  CardActions,
-  CardContent,
-  CardMedia,
   Divider,
   ListItemIcon,
   ListItemText,
@@ -28,8 +21,8 @@ import {
   Typography
 } from "@mui/material";
 import React from "react";
-const HEADER_COLUMN_HEIGHT = "50px";
-const FOOTER_COLUMN_HEIGHT = "56px";
+import BoardCardList from "./CardList";
+
 const BoardColumn = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -56,7 +49,7 @@ const BoardColumn = () => {
       {/* Header */}
       <Box
         sx={{
-          height: HEADER_COLUMN_HEIGHT,
+          height: (theme) => theme.trello.headerColumnHeight,
           p: 2,
           display: "flex",
           alignItems: "center",
@@ -136,70 +129,12 @@ const BoardColumn = () => {
         </Box>
       </Box>
       {/* Content */}
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          gap: 1,
-          p: "0 5px",
-          m: "0 5px",
-          overflowX: "hidden",
-          overflowY: "auto",
-          maxHeight: (theme) =>
-            `calc(${theme.trello.boardBarContentHeight} - ${theme.spacing(
-              5
-            )} - ${HEADER_COLUMN_HEIGHT} - ${FOOTER_COLUMN_HEIGHT})`,
-          "&::-webkit-scrollbar-thumb": {
-            backgroundColor: "#ced0da",
-            borderRadius: "10px"
-          },
-          "&::-webkit-scrollbar-thumb:hover": {
-            backgroundColor: "#bfc2cf"
-          }
-        }}
-      >
-        {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
-          <Card
-            key={item}
-            sx={{
-              cursor: "pointer",
-              boxShadow: "0 1px 1px rgba(0,0,0,0.2)",
-              overflow: "unset"
-            }}
-          >
-            <CardMedia
-              sx={{ height: 140 }}
-              image="https://img.freepik.com/free-photo/painting-mountain-lake-with-mountain-background_188544-9126.jpg"
-              title="green iguana"
-            />
-            <CardContent
-              sx={{
-                p: 1.5,
-                "&:last-child": {
-                  p: 1.5
-                }
-              }}
-            >
-              <Typography>Trello MERN</Typography>
-            </CardContent>
-            <CardActions sx={{ p: "0 4px 8px 4px" }}>
-              <Button size="small" startIcon={<GroupIcon />}>
-                20
-              </Button>
-              <Button size="small" startIcon={<MarkUnreadChatAltIcon />}>
-                15
-              </Button>
-              <Button size="small" startIcon={<AttachmentIcon />}>
-                10
-              </Button>
-            </CardActions>
-          </Card>
-        ))}
-      </Box>
+      <BoardCardList />
       {/* Footer */}
+
       <Box
         sx={{
-          height: FOOTER_COLUMN_HEIGHT,
+          height: (theme) => theme.trello.footerColumnHeight,
           p: 2,
           display: "flex",
           alignItems: "center",
@@ -216,5 +151,7 @@ const BoardColumn = () => {
     </Box>
   );
 };
+
+BoardColumn.PropTypes = {};
 
 export default BoardColumn;
