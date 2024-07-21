@@ -1,56 +1,233 @@
-import { Box, Button } from "@mui/material";
+import {
+  DndContext,
+  MouseSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
+  DragOverlay,
+  defaultDropAnimationSideEffects,
+  closestCorners
+} from "@dnd-kit/core";
+import { arrayMove } from "@dnd-kit/sortable";
+import { Box } from "@mui/material";
+import { useEffect, useState } from "react";
+import { mapOrder } from "~/util";
 import ListColumn from "./ListColumn";
-import NoteAddIcon from "@mui/icons-material/NoteAdd";
-const BoardContent = () => {
+
+import BoardColumn from "./ListColumn/BoardColumn";
+import BoardCard from "./ListColumn/BoardColumn/CardList/Card";
+import { cloneDeep } from "lodash";
+
+const ACTIVE_DRAG_ITEM_TYPE = {
+  COLUMN: "ACTIVE_DRAG_ITEM_TYPE_COLUMN",
+  CARD: "ACTIVE_DRAG_ITEM_TYPE_CARD"
+};
+
+const BoardContent = ({ board }) => {
+  // state columns
+  const [orderColumns, setOrderColumns] = useState([]);
+
+  const [activeDragItemId, setActiveDragItemId] = useState(null);
+  const [activeDragItemType, setActiveDragItemType] = useState(null);
+  const [activeDragItemData, setActiveDragItemData] = useState(null);
+
+  useEffect(() => {
+    const ordered = mapOrder(board?.columns, board?.columnOrderIds, "_id");
+    setOrderColumns(ordered);
+  }, [board]);
+
+  /**
+   * find data in orders
+   * @param {*} cardId is string
+   * @returns object column
+   */
+  const findColumnByCardId = (cardId) => {
+    return orderColumns.find((c) =>
+      c?.cards?.map((c) => c?._id)?.includes(cardId)
+    );
+  };
+
+  // #region dndKit sortable
+
+  // const pointerSensor = useSensor(PointerSensor, {
+  //   activationConstraint: {
+  //     distance: 10
+  //   }
+  // });
+
+  // fix opacity undefined
+  const dropAnimation = {
+    sideEffects: defaultDropAnimationSideEffects({
+      styles: {
+        active: {
+          opacity: 0.5
+        }
+      }
+    })
+  };
+
+  const touchSensor = useSensor(TouchSensor, {
+    // Press delay of 250ms, with tolerance of 500px of movement for phone and tablet devices
+    activationConstraint: {
+      delay: 250,
+      tolerance: 500
+    }
+  });
+
+  const mouseSensor = useSensor(MouseSensor, {
+    activationConstraint: {
+      distance: 10
+    }
+  });
+
+  const sensors = useSensors(touchSensor, mouseSensor);
+
+  /**
+   * Drag start item
+   * @param {*} event argument in dndKit
+   */
+  const handleDragStart = (event) => {
+    setActiveDragItemId(event?.active?.id);
+    setActiveDragItemType(
+      event?.active?.data?.current?.columnId
+        ? ACTIVE_DRAG_ITEM_TYPE.CARD
+        : ACTIVE_DRAG_ITEM_TYPE.COLUMN
+    );
+    setActiveDragItemData(event?.active?.data?.current);
+  };
+
+  /**
+   * Drag over item
+   * @param {*} event argument in dndKit
+   */
+  const handleDragOver = (event) => {
+    if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN) {
+      return;
+    }
+    const { active, over } = event;
+    if (!over || !active) return;
+
+    const {
+      id: activeId,
+      data: { current: currentActive }
+    } = active;
+    const { id: overId } = over;
+    const activeColumn = findColumnByCardId(activeId);
+    const overColumn = findColumnByCardId(overId);
+
+    if (!activeColumn || !overColumn) return;
+    if (activeColumn._id !== overColumn._id) {
+      setOrderColumns((prev) => {
+        const overCardIdx = overColumn?.cards?.findIndex(
+          (card) => card._id === overId
+        );
+
+        let newIndex;
+        const isBelowOverItem =
+          active.rect?.current?.translated &&
+          active.rect.current.translated.top > over.rect.top + over.rect.height;
+
+        const modifier = isBelowOverItem ? 1 : 0;
+
+        newIndex =
+          overCardIdx >= 0
+            ? overCardIdx + modifier
+            : overColumn?.cards?.length + 1;
+
+        //cloneDeep(prev) to not impact real data
+        const nextColumns = cloneDeep(prev);
+        const nextActiveColumn = nextColumns.find(
+          (c) => c._id === activeColumn._id
+        );
+        const nextOverColumn = nextColumns.find(
+          (c) => c._id === overColumn._id
+        );
+
+        if (nextActiveColumn) {
+          nextActiveColumn.cards = nextActiveColumn?.cards?.filter(
+            (card) => card._id !== activeId
+          );
+          nextActiveColumn.columnOrderIds = nextActiveColumn?.cards?.map(
+            (item) => item._id
+          );
+        }
+        if (nextOverColumn) {
+          // Remove activeId before inserting activeId
+          nextOverColumn.cards = nextOverColumn?.cards?.filter(
+            (card) => card._id !== activeId
+          );
+          // insert activeId to new index
+          nextOverColumn.cards = nextOverColumn.cards.toSpliced(
+            newIndex,
+            0,
+            currentActive
+          );
+          //update cardIds
+          nextOverColumn.cardOrderIds = nextOverColumn.cards?.map(
+            (item) => item._id
+          );
+        }
+        return nextColumns;
+      });
+    }
+  };
+
+  /**
+   * Drag end item
+   * @param {*} event argument in dndKit
+   * @returns new state
+   */
+  const handleDragEnd = (event) => {
+    if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.CARD) {
+      return;
+    }
+    const { active, over } = event;
+    if (!over) return;
+    if (active.id !== over.id) {
+      const oldIdx = orderColumns.findIndex((c) => c._id === active.id);
+      const newIdx = orderColumns.findIndex((c) => c._id === over.id);
+      const dndMoveOrderedColumn = arrayMove(orderColumns, oldIdx, newIdx);
+      // Using update APIs
+      // const dndMoveOrderedColumnIds = dndMoveOrderedColumn.map((c) => c._id);
+      // console.log(dndMoveOrderedColumnIds);
+      setOrderColumns(dndMoveOrderedColumn);
+    }
+    setActiveDragItemId(null);
+    setActiveDragItemType(null);
+    setActiveDragItemData(null);
+  };
+  // #endregion
+
   return (
-    <Box
-      sx={{
-        width: "100%",
-        backgroundColor: (theme) =>
-          theme.palette.mode === "dark" ? "#34495e" : "#1976d2",
-        height: (theme) => theme.trello.boardBarContentHeight,
-        p: "10px 0"
-      }}
+    <DndContext
+      onDragStart={handleDragStart}
+      onDragOver={handleDragOver}
+      onDragEnd={handleDragEnd}
+      sensors={sensors}
+      // closestCorners thuật toán phát hiện va chạm (góc)
+      collisionDetection={closestCorners}
     >
       <Box
         sx={{
-          bgcolor: "inherit",
           width: "100%",
-          height: "100%",
-          overflowY: "hidden",
-          overflowX: "auto",
-          display: "flex",
-          "&::-webkit-scrollbar-track": {
-            m: 2
-          }
+          backgroundColor: (theme) =>
+            theme.palette.mode === "dark" ? "#34495e" : "#1976d2",
+          height: (theme) => theme.trello.boardBarContentHeight,
+          p: "10px 0"
         }}
       >
-        <ListColumn />
-        <Box
-          sx={{
-            minWidth: "200px",
-            maxWidth: "200px",
-            mx: 2,
-            borderRadius: "6px",
-            height: "fit-content",
-            background: "#ffffff3d"
-          }}
-        >
-          <Button
-            sx={{
-              color: "white",
-              display: "flex",
-              justifyContent: "flex-start",
-              pl: 2.5,
-              py: 1
-            }}
-            startIcon={<NoteAddIcon sx={{ color: "white" }} />}
-          >
-            Add new column
-          </Button>
-        </Box>
+        <ListColumn columns={orderColumns} />
+        <DragOverlay dropAnimation={dropAnimation}>
+          {!activeDragItemType && null}
+          {activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN && (
+            <BoardColumn column={activeDragItemData} />
+          )}
+          {activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.CARD && (
+            <BoardCard card={activeDragItemData} />
+          )}
+        </DragOverlay>
       </Box>
-    </Box>
+    </DndContext>
   );
 };
 

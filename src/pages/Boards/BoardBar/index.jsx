@@ -1,15 +1,15 @@
-import { Avatar, AvatarGroup, Box, Chip } from "@mui/material";
-import React from "react";
-import ChipBoard from "./ChipBoard";
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import VpnLockIcon from "@mui/icons-material/VpnLock";
 import AddToDriveIcon from "@mui/icons-material/AddToDrive";
-import FilterListIcon from "@mui/icons-material/FilterList";
 import BoltIcon from "@mui/icons-material/Bolt";
-import AvatarBoard from "./AvatarBoard";
-import CustomButton from "~/components/CustomButton";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import FilterListIcon from "@mui/icons-material/FilterList";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
-const BoardBar = () => {
+import VpnLockIcon from "@mui/icons-material/VpnLock";
+import { AvatarGroup, Box } from "@mui/material";
+import CustomButton from "~/components/CustomButton";
+import AvatarBoard from "./AvatarBoard";
+import ChipBoard from "./ChipBoard";
+import { capitalizeFirstLetter } from "~/util";
+const BoardBar = ({ board }) => {
   return (
     <Box
       sx={{
@@ -27,16 +27,20 @@ const BoardBar = () => {
       }}
     >
       <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-        <ChipBoard
-          label={"Trello Dashboard"}
-          onClick={() => console.log("Trello Dashboard")}
-          icon={<DashboardIcon />}
-        />
-        <ChipBoard
-          label={"Public/Private Workspaces"}
-          onClick={() => console.log("Public/Private Workspaces")}
-          icon={<VpnLockIcon />}
-        />{" "}
+        {board?.title && (
+          <ChipBoard
+            label={board?.title}
+            onClick={() => console.log("Trello Dashboard")}
+            icon={<DashboardIcon />}
+          />
+        )}
+        {board?.type && (
+          <ChipBoard
+            label={capitalizeFirstLetter(board?.type)}
+            onClick={() => console.log("Public/Private Workspaces")}
+            icon={<VpnLockIcon />}
+          />
+        )}
         <ChipBoard
           label={"Add To Google Drive"}
           onClick={() => console.log("Add To Google Drive")}
