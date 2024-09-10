@@ -6,9 +6,9 @@ import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import VpnLockIcon from "@mui/icons-material/VpnLock";
 import { AvatarGroup, Box } from "@mui/material";
 import CustomButton from "~/components/CustomButton";
+import { capitalizeFirstLetter } from "~/util";
 import AvatarBoard from "./AvatarBoard";
 import ChipBoard from "./ChipBoard";
-import { capitalizeFirstLetter } from "~/util";
 const BoardBar = ({ board }) => {
   return (
     <Box
@@ -30,6 +30,7 @@ const BoardBar = ({ board }) => {
         {board?.title && (
           <ChipBoard
             label={board?.title}
+            title={board?.description}
             onClick={() => console.log("Trello Dashboard")}
             icon={<DashboardIcon />}
           />
