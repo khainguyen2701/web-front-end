@@ -14,21 +14,28 @@ import {
   Box,
   Button,
   Divider,
+  InputAdornment,
   ListItemIcon,
   ListItemText,
   Menu,
   MenuItem,
   MenuList,
+  TextField,
   Tooltip,
   Typography
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import { mapOrder } from "~/util";
+import ClearIcon from "@mui/icons-material/Clear";
 import BoardCardList from "./CardList";
 
 const BoardColumn = ({ column }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+
+  const [isOpen, setIsOpen] = useState(false);
+  const toggleOpen = () => setIsOpen(!isOpen);
+  const [value, setSearch] = useState("");
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -162,18 +169,118 @@ const BoardColumn = ({ column }) => {
         <Box
           sx={{
             height: (theme) => theme.trello.footerColumnHeight,
-            p: 2,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between"
+            p: 2
           }}
         >
-          <Button startIcon={<AddCardIcon fontSize="small" />}>
-            Add new card
-          </Button>
-          <Tooltip title="Drag Over Item">
-            <DragHandleIcon sx={{ cursor: "pointer" }} />
-          </Tooltip>
+          {isOpen ? (
+            <Box
+              sx={{
+                height: "100%",
+                display: "flex",
+                alignItems: "center",
+                gap: 1
+              }}
+            >
+              <TextField
+                label="Enter column title..."
+                type="text"
+                autoFocus
+                variant="outlined"
+                size="small"
+                value={value}
+                onChange={(event) => {
+                  setSearch(event.target.value);
+                }}
+                sx={{
+                  "& label": {
+                    color: "text.primary"
+                  },
+                  "& input": {
+                    color: (theme) => theme.palette.primary.main,
+                    bgcolor: (theme) =>
+                      theme.palette.mode === "dark" ? "#333643" : "white"
+                  },
+                  "& label.Mui-focused": {
+                    color: (theme) => theme.palette.primary.main
+                  },
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": {
+                      borderColor: (theme) => theme.palette.primary.main
+                    },
+                    "&:hover fieldset": {
+                      borderColor: (theme) => theme.palette.primary.main
+                    },
+                    "& .Mui-focused fieldset": {
+                      borderColor: (theme) => theme.palette.primary.main
+                    }
+                  },
+                  "& .MuiOutlinedInput-input": {
+                    borderRadius: 1
+                  }
+                }}
+                InputProps={{
+                  endAdornment: value ? (
+                    <InputAdornment position="end">
+                      <ClearIcon
+                        sx={{
+                          color: (theme) => theme.palette.warning.light,
+                          cursor: "pointer"
+                        }}
+                        onClick={() => setSearch("")}
+                      />
+                    </InputAdornment>
+                  ) : null
+                }}
+              />
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <Button
+                  variant="contained"
+                  color="success"
+                  size="small"
+                  sx={{
+                    boxShadow: "none",
+                    border: "0.5px solid",
+                    borderColor: (theme) => theme.palette.success.main,
+                    "&:hover": (theme) => theme.palette.success.main
+                  }}
+                >
+                  Add
+                </Button>
+                <ClearIcon
+                  sx={{
+                    color: "white",
+                    cursor: "pointer",
+                    "&:hover": {
+                      color: (theme) => theme.palette.warning.light
+                    }
+                  }}
+                  onClick={() => {
+                    toggleOpen();
+                    setSearch("");
+                  }}
+                />
+              </Box>
+            </Box>
+          ) : (
+            <Box
+              sx={{
+                height: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between"
+              }}
+            >
+              <Button
+                onClick={toggleOpen}
+                startIcon={<AddCardIcon fontSize="small" />}
+              >
+                Add new card
+              </Button>
+              <Tooltip title="Drag Over Item">
+                <DragHandleIcon sx={{ cursor: "pointer" }} />
+              </Tooltip>
+            </Box>
+          )}
         </Box>
       </Box>
     </div>
